@@ -115,7 +115,7 @@ $modversion['blocks'][1] = array(
     'show_func'   => 'b_gwreports_block_topic_show',
     'edit_func'   => 'b_gwreports_block_topic_edit',
     'options'     => 'options',
-    'template'    => 'gwreports_block_topic.html'
+    'template'    => 'gwreports_block_topic.tpl'
 );
 
 $modversion['blocks'][] = array(
@@ -125,7 +125,7 @@ $modversion['blocks'][] = array(
     'show_func'   => 'b_gwreports_block_quick_report_show',
     'edit_func'   => 'b_gwreports_block_quick_report_edit',
     'options'     => 'options',
-    'template'    => 'gwreports_block_quick_report.html'
+    'template'    => 'gwreports_block_quick_report.tpl'
 );
 
 $modversion['blocks'][] = array(
@@ -135,46 +135,46 @@ $modversion['blocks'][] = array(
     'show_func'   => 'b_gwreports_block_report_show',
     'edit_func'   => 'b_gwreports_block_report_edit',
     'options'     => 'options',
-    'template'    => 'gwreports_block_report.html'
+    'template'    => 'gwreports_block_report.tpl'
 );
 
 // Templates
 $modversion['templates'][1] = array(
-    'file'        => 'gwreports_index.html',
+    'file'        => 'gwreports_index.tpl',
     'description' => 'Module Index'
 );
 
 $modversion['templates'][] = array(
-    'file'        => 'gwreports_columnedit.html',
+    'file'        => 'gwreports_columnedit.tpl',
     'description' => 'Column Manager'
 );
 
 $modversion['templates'][] = array(
-    'file'        => 'gwreports_reportedit.html',
+    'file'        => 'gwreports_reportedit.tpl',
     'description' => 'Report Manager'
 );
 
 $modversion['templates'][] = array(
-    'file'        => 'gwreports_reportview.html',
+    'file'        => 'gwreports_reportview.tpl',
     'description' => 'Report Viewer'
 );
 
 $modversion['templates'][] = array(
-    'file'        => 'gwreports_reportprint.html',
+    'file'        => 'gwreports_reportprint.tpl',
     'description' => 'Report Print'
 );
 
 $modversion['templates'][] = array(
-    'file'        => 'gwreports_sectionedit.html',
+    'file'        => 'gwreports_sectionedit.tpl',
     'description' => 'Report Section Manager'
 );
 
 $modversion['templates'][] = array(
-    'file'        => 'gwreports_topic.html',
+    'file'        => 'gwreports_topic.tpl',
     'description' => 'Topic Manager'
 );
 
 $modversion['templates'][] = array(
-    'file'        => 'gwreports_autocomplete.html',
+    'file'        => 'gwreports_autocomplete.tpl',
     'description' => 'Auto Complete Scripts and Styles'
 );

@@ -11,7 +11,7 @@
  */
 
 include __DIR__ . '/../../mainfile.php';
-$GLOBALS['xoopsOption']['template_main'] = 'gwreports_index.html';
+$GLOBALS['xoopsOption']['template_main'] = 'gwreports_index.tpl';
 include XOOPS_ROOT_PATH . '/header.php';
 $currentscript = basename(__FILE__);
 //include_once XOOPS_ROOT_PATH.'/class/xoopsformloader.php';

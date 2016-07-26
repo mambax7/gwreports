@@ -11,7 +11,7 @@
  */
 
 include __DIR__ . '/../../mainfile.php';
-$GLOBALS['xoopsOption']['template_main'] = 'gwreports_sectionedit.html';
+$GLOBALS['xoopsOption']['template_main'] = 'gwreports_sectionedit.tpl';
 include XOOPS_ROOT_PATH . '/header.php';
 
 include __DIR__ . '/include/common.php';

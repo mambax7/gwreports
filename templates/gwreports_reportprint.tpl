@@ -4,7 +4,7 @@
     <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
 
     <{if isset($title)}>
-    <title><{$title}></title>
+        <title><{$title}></title>
     <{/if}>
     <link rel="stylesheet" type="text/css" href="print.css"/>
 
@@ -12,32 +12,32 @@
 <body onload="window.print()">
 
 <{if isset($title)}>
-<div class="content_body">
-    <h1><{$title}></h1>
-</div>
+    <div class="content_body">
+        <h1><{$title}></h1>
+    </div>
 <{/if}>
 <{if isset($page_message)}>
-<div class="content_body"><{$page_message}><br/><br/></div>
+    <div class="content_body"><{$page_message}><br/><br/></div>
 <{/if}>
 <{if isset($err_message)}>
-<hr/>
-<div class="errorMsg"><{$err_message}></div>
-<hr/>
+    <hr/>
+    <div class="errorMsg"><{$err_message}></div>
+    <hr/>
 <{/if}>
 <{if isset($message)}>
-<hr/>
-<div class="resultMsg"><{$message}></div>
-<hr/>
+    <hr/>
+    <div class="resultMsg"><{$message}></div>
+    <hr/>
 <{/if}>
 <{if isset($report_parameter_form)}>
-<div class="parmform"><{$report_parameter_form}></div>
-<br/>
+    <div class="parmform"><{$report_parameter_form}></div>
+    <br/>
 <{/if}>
 <{if isset($body)}>
-<div><{$body}></div>
+    <div><{$body}></div>
 <{/if}><br/>
 <{if isset($debug)}>
-<div><{$debug}></div>
+    <div><{$debug}></div>
 <{/if}>
 
 

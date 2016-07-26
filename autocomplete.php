@@ -16,7 +16,7 @@ $xoopsLogger->activated = false; // this corrupts the reading of the json return
 //error_reporting(-1);
 //trigger_error('autocomplete.php');
 
-//$GLOBALS['xoopsOption']['template_main'] = 'gwreports_reportview.html';
+//$GLOBALS['xoopsOption']['template_main'] = 'gwreports_reportview.tpl';
 include XOOPS_ROOT_PATH . '/header.php';
 include __DIR__ . '/include/common.php';
 

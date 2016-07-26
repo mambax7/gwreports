@@ -12,7 +12,7 @@
 
 include __DIR__ . '/../../mainfile.php';
 include_once XOOPS_ROOT_PATH . '/class/template.php';
-$GLOBALS['xoopsOption']['template_main'] = 'gwreports_reportprint.html';
+$GLOBALS['xoopsOption']['template_main'] = 'gwreports_reportprint.tpl';
 $xoopsTpl                                = new XoopsTpl();
 
 include __DIR__ . '/include/common.php';
@@ -547,4 +547,4 @@ if (isset($debug)) {
     $xoopsTpl->assign('debug', $debug);
 }
 
-$xoopsTpl->display('db:gwreports_reportprint.html');
+$xoopsTpl->display('db:gwreports_reportprint.tpl');

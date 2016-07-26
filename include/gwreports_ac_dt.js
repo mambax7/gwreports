@@ -35,7 +35,8 @@ function gwreportsIncludeStyle(cssFilePath) {
         css.rel = "stylesheet";
         css.href = cssFilePath[i];
         document.body.appendChild(css);
-    };
+    }
+    ;
 }
 
 function gwreportsActivateAutoComplete() {
