@@ -1,56 +1,54 @@
 <?php
 /**
-* report_test.php - test a report
-*
-* This file is part of gwreports - geekwright Reports
-*
-* @copyright  Copyright © 2011-2013 geekwright, LLC. All rights reserved.
-* @license    gwreports/docs/license.txt  GNU General Public License (GPL)
-* @since      1.0
-* @author     Richard Griffith <richard@geekwright.com>
-* @package    gwreports
-* @version    $Id$
-*/
+ * report_test.php - test a report
+ *
+ * This file is part of gwreports - geekwright Reports
+ *
+ * @copyright  Copyright © 2011-2013 geekwright, LLC. All rights reserved.
+ * @license    gwreports/docs/license.txt  GNU General Public License (GPL)
+ * @author     Richard Griffith <richard@geekwright.com>
+ * @package    gwreports
+ */
 
-include '../../mainfile.php';
+include __DIR__ . '/../../mainfile.php';
 $GLOBALS['xoopsOption']['template_main'] = 'gwreports_reportview.html';
-include(XOOPS_ROOT_PATH."/header.php");
+include XOOPS_ROOT_PATH . '/header.php';
 
-include('include/common.php');
+include __DIR__ . '/include/common.php';
 
-if (!($xoopsUser && ($xoopsUser->isAdmin()))) {
+if (!($xoopsUser && $xoopsUser->isAdmin())) {
     redirect_header('index.php', 3, _NOPERM);
 }
 
 // globals that functions depend on
-$section_id=0;            // used for 'test' mode editing
+$section_id = 0;          // used for 'test' mode editing
 
-function emitColumnHeader($column_name, &$columns, $multirow=1)
+function emitColumnHeader($column_name, &$columns, $multirow = 1)
 {
     // return a column header using column definitions
-// this version is for editor testing and builds links to column editor
-global $section_id;
+    // this version is for editor testing and builds links to column editor
+    global $section_id;
 
-    $link=$column_name;
+    $link = $column_name;
 
     if (isset($columns[$column_name])) { // have a definition
         if ($columns[$column_name]['column_hide']) {
             return '';
         }
-        $baseurl='editcolumn.php?cid='.$columns[$column_name]['column_id'];
-        $title=$columns[$column_name]['column_title'];
-        if ($title=='') {
-            $title=$column_name;
+        $baseurl = 'editcolumn.php?cid=' . $columns[$column_name]['column_id'];
+        $title   = $columns[$column_name]['column_title'];
+        if ($title == '') {
+            $title = $column_name;
         }
-        $link='<a href="'.$baseurl.'">'.$title.'</a>';
+        $link = '<a href="' . $baseurl . '">' . $title . '</a>';
     } else {
-        $baseurl='newcolumn.php?sid='.$section_id.'&cname='.$column_name;
-        $link='<a href="'.$baseurl.'">'.$column_name.'</a>';
+        $baseurl = 'newcolumn.php?sid=' . $section_id . '&cname=' . $column_name;
+        $link    = '<a href="' . $baseurl . '">' . $column_name . '</a>';
     }
     if ($multirow) {
-        $header="<th>$link</th>";
+        $header = "<th>$link</th>";
     } else {
-        $header='<td class="head">'.$link.'</td>';
+        $header = '<td class="head">' . $link . '</td>';
     }
     return $header;
 }
@@ -59,24 +57,24 @@ function emitColumn($column_name, &$columns, $row, $breaktriggered, $rowheaders)
 {
     // condition column display using column definitions
 
-    $r=$row[$column_name];
-    $css='';
+    $r   = $row[$column_name];
+    $css = '';
     if (isset($columns[$column_name])) { // have a definition
-        if ($columns[$column_name]['column_style']!='') {
-            $css=' '.$columns[$column_name]['column_style'];
+        if ($columns[$column_name]['column_style'] != '') {
+            $css = ' ' . $columns[$column_name]['column_style'];
         }
 
         if ($columns[$column_name]['column_break']) {
             if ($breaktriggered) {
-                $columns[$column_name]['last_column_break']=$r;
+                $columns[$column_name]['last_column_break'] = $r;
             }
         }
 
         if ($columns[$column_name]['column_outline']) {
-            if ($r==$columns[$column_name]['last_column_outline'] && !$breaktriggered) {
-                $r='';
+            if ($r == $columns[$column_name]['last_column_outline'] && !$breaktriggered) {
+                $r = '';
             } else {
-                $columns[$column_name]['last_column_outline']=$r;
+                $columns[$column_name]['last_column_outline'] = $r;
             }
         }
 
@@ -92,41 +90,41 @@ function emitColumn($column_name, &$columns, $row, $breaktriggered, $rowheaders)
         }
 
         if ($columns[$column_name]['column_is_unixtime']) {
-            if ($columns[$column_name]['column_format']!='') {
-                $r=date($columns[$column_name]['column_format'], $r);
+            if ($columns[$column_name]['column_format'] != '') {
+                $r = date($columns[$column_name]['column_format'], $r);
             } else {
-                $r=formatTimestamp($r);
+                $r = formatTimestamp($r);
             }
         } else { // not unixtime
-            if ($columns[$column_name]['column_format']!='') {
-                $r=sprintf($columns[$column_name]['column_format'], $r);
+            if ($columns[$column_name]['column_format'] != '') {
+                $r = sprintf($columns[$column_name]['column_format'], $r);
             }
         }
 
-        if ($columns[$column_name]['column_extended_format']!='') {
-            $row[$column_name]=$r; // preserve any formatting we have so far
-            $r=str_replace($rowheaders, $row, $columns[$column_name]['column_extended_format']);
-            $r=str_replace('{$xurl}', XOOPS_URL, $r);
+        if ($columns[$column_name]['column_extended_format'] != '') {
+            $row[$column_name] = $r; // preserve any formatting we have so far
+            $r                 = str_replace($rowheaders, $row, $columns[$column_name]['column_extended_format']);
+            $r                 = str_replace('{$xurl}', XOOPS_URL, $r);
         }
 
         if ($columns[$column_name]['column_hide']) {
             return '';
         }
     }
-    $r="<td$css>$r</td>";
+    $r = "<td$css>$r</td>";
     return $r;
 }
 
 function checkBreak(&$columns, $row)
 {
     // check row for any column change break
-$breaktriggered=false;
+    $breaktriggered = false;
 
-    foreach ($row as $col=>$val) {
+    foreach ($row as $col => $val) {
         if (isset($columns[$col])) { // have a definition
             if ($columns[$col]['column_break']) {
-                if ($val!=$columns[$col]['last_column_break']) {
-                    $breaktriggered=true;
+                if ($val != $columns[$col]['last_column_break']) {
+                    $breaktriggered = true;
                 }
             }
         }
@@ -137,38 +135,38 @@ $breaktriggered=false;
 function emitBreak(&$columns, $rowheaders)
 {
     // output columns for a column change break
-$sumline='';
-    $havesum=false;
-    $havebreak=false;
+    $sumline   = '';
+    $havesum   = false;
+    $havebreak = false;
 
-    foreach ($rowheaders as $col=>$val) {
-        $r='';
-        $css='';
+    foreach ($rowheaders as $col => $val) {
+        $r   = '';
+        $css = '';
         if (isset($columns[$col])) { // have a definition
             if ($columns[$col]['column_break']) {
-                $havebreak=true;
+                $havebreak = true;
             }
             if (!$columns[$col]['column_hide']) {
-                if ($columns[$col]['column_style']!='') {
-                    $css=' '.$columns[$col]['column_style'];
+                if ($columns[$col]['column_style'] != '') {
+                    $css = ' ' . $columns[$col]['column_style'];
                 }
                 if ($columns[$col]['column_sum']) {
-                    $havesum=true;
-                    $r=$columns[$col]['sum_column_break'].'';
-                    $columns[$col]['sum_column_break']=0;    // used it, now reset
-                    if ($columns[$col]['column_format']!='') {
-                        $r=sprintf($columns[$col]['column_format'], $r);
+                    $havesum                           = true;
+                    $r                                 = $columns[$col]['sum_column_break'] . '';
+                    $columns[$col]['sum_column_break'] = 0;   // used it, now reset
+                    if ($columns[$col]['column_format'] != '') {
+                        $r = sprintf($columns[$col]['column_format'], $r);
                     }
-                    $r='<hr /><br />'.$r;
+                    $r = '<hr /><br />' . $r;
                 } else { // not sum
-                    $r='&nbsp;';
+                    $r = '&nbsp;';
                 }
             }
         } else { // no definition
-            $r=' ';
+            $r = ' ';
         }
-        if ($r!='') {
-            $sumline.="<td$css>$r</td>";
+        if ($r != '') {
+            $sumline .= "<td$css>$r</td>";
         }
     }
 
@@ -182,33 +180,33 @@ $sumline='';
 function emitFinalSummary(&$columns, $rowheaders)
 {
     // output columns for final summary row
-$sumline='';
-    $havesum=false;
+    $sumline = '';
+    $havesum = false;
 
-    foreach ($rowheaders as $col=>$val) {
-        $r='';
-        $css='';
+    foreach ($rowheaders as $col => $val) {
+        $r   = '';
+        $css = '';
         if (isset($columns[$col])) { // have a definition
             if (!$columns[$col]['column_hide']) {
-                if ($columns[$col]['column_style']!='') {
-                    $css=' '.$columns[$col]['column_style'];
+                if ($columns[$col]['column_style'] != '') {
+                    $css = ' ' . $columns[$col]['column_style'];
                 }
                 if ($columns[$col]['column_sum']) {
-                    $havesum=true;
-                    $r=$columns[$col]['total_column_sum'].''; // coerce to string
-                    if ($columns[$col]['column_format']!='') {
-                        $r=sprintf($columns[$col]['column_format'], $r);
+                    $havesum = true;
+                    $r       = $columns[$col]['total_column_sum'] . ''; // coerce to string
+                    if ($columns[$col]['column_format'] != '') {
+                        $r = sprintf($columns[$col]['column_format'], $r);
                     }
-                    $r='<hr /><br />'.$r;
+                    $r = '<hr /><br />' . $r;
                 } else { // not sum
-                    $r=' ';
+                    $r = ' ';
                 }
             }
         } else { // no definition
-            $r=' ';
+            $r = ' ';
         }
-        if ($r!='') {
-            $sumline.="<td$css>$r</td>";
+        if ($r != '') {
+            $sumline .= "<td$css>$r</td>";
         }
     }
 
@@ -222,12 +220,12 @@ $sumline='';
 function initializeColumns(&$columns, $row, &$rowheaders)
 {
     // initialize columns and return count of columns
-$cnt=0;
+    $cnt = 0;
 
-    $rowheaders=array();
+    $rowheaders = array();
 
-    foreach ($row as $col=>$val) {
-        $rowheaders[$col]='{'.$col.'}';
+    foreach ($row as $col => $val) {
+        $rowheaders[$col] = '{' . $col . '}';
 
         if (isset($columns[$col])) { // have a definition
             if (!$columns[$col]['column_hide']) {
@@ -251,274 +249,273 @@ $cnt=0;
     return $cnt;
 }
 
-$op='display';
+$op = 'display';
 if (isset($_POST['submit'])) {
-    $op='run';
+    $op = 'run';
 }
 
-$report_id=0;
-$report_name='';
-$report_description='';
-$report_active=0;
-$access_groups=array();
-$report_topic=0;
+$report_id          = 0;
+$report_name        = '';
+$report_description = '';
+$report_active      = 0;
+$access_groups      = array();
+$report_topic       = 0;
 
-$this_report_needs_jquery=false;
+$this_report_needs_jquery = false;
 
-    if (isset($_GET['rid'])) {
-        $report_id = intval($_GET['rid']);
-    }
-    if (isset($_POST['rid'])) {
-        $report_id = intval($_POST['rid']);
-    }
+if (isset($_GET['rid'])) {
+    $report_id = (int)$_GET['rid'];
+}
+if (isset($_POST['rid'])) {
+    $report_id = (int)$_POST['rid'];
+}
 
 // get data from table
 
-    $sql='SELECT * FROM '.$xoopsDB->prefix('gwreports_report');
-    $sql.=" WHERE report_id = $report_id ";
+$sql = 'SELECT * FROM ' . $xoopsDB->prefix('gwreports_report');
+$sql .= " WHERE report_id = $report_id ";
 
-    $cnt=0;
-    $result = $xoopsDB->query($sql);
-    if ($result) {
-        while ($myrow=$xoopsDB->fetchArray($result)) {
-            $report_name=$myrow['report_name'];
-            $report_description=$myrow['report_description'];
-            $report_active=$myrow['report_active'];
-            ++$cnt;
-        }
-        if ($cnt) {
-            $xoopsTpl->assign('report_id', $report_id);
-            $access_groups=getReportAccess($report_id);
-            $report_topic=getReportTopic($report_id);
-            $sections=getReportSections($report_id);
-            $xoopsTpl->assign('report_sections', $sections);
-        } else {
-            $err_message = _MD_GWREPORTS_REPORT_NOTFOUND;
-            $report_id=0;
-        }
+$cnt    = 0;
+$result = $xoopsDB->query($sql);
+if ($result) {
+    while ($myrow = $xoopsDB->fetchArray($result)) {
+        $report_name        = $myrow['report_name'];
+        $report_description = $myrow['report_description'];
+        $report_active      = $myrow['report_active'];
+        ++$cnt;
+    }
+    if ($cnt) {
+        $xoopsTpl->assign('report_id', $report_id);
+        $access_groups = getReportAccess($report_id);
+        $report_topic  = getReportTopic($report_id);
+        $sections      = getReportSections($report_id);
+        $xoopsTpl->assign('report_sections', $sections);
     } else {
         $err_message = _MD_GWREPORTS_REPORT_NOTFOUND;
-        $report_id=0;
+        $report_id   = 0;
     }
+} else {
+    $err_message = _MD_GWREPORTS_REPORT_NOTFOUND;
+    $report_id   = 0;
+}
 
-    setPageTitle($report_name);
+setPageTitle($report_name);
 
 // get parameters
-    $parameters=getReportParameters($report_id);
-//	$xoopsTpl->assign('report_parameters', $parameters);
+$parameters = getReportParameters($report_id);
+//  $xoopsTpl->assign('report_parameters', $parameters);
 
-    foreach ($parameters as $v) {
-        $parm_length=$v['parameter_length'];
-        $parm_required=$v['parameter_required'];
-        $parm_name='rptparm_'.$v['parameter_name'];
-        $parm_type=$v['parameter_type'];
-        $parm_value=$v['parameter_default'];
-        if (isset($_POST[$parm_name])) {
-            $parm_value = cleaner($_POST[$parm_name]);
-        }
-        switch ($parm_type) {
-            case "int":
-                $parm_value = intval($parm_value);
-                break;
-            case "yesno":
-                $parm_value = intval($parm_value);
-                if ($parm_value) {
-                    $parm_value='1';
-                } else {
-                    $parm_value='0';
-                }
-                break;
-            case 'autocomplete':
-                $this_report_needs_jquery=true;
-                // fall through
-            default: // text, liketext, date
-                $parm_value=clipstring($parm_value, $parm_length);
-                break;
-        }
-        $parameters[$v['parameter_id']]['value']=$parm_value;
+foreach ($parameters as $v) {
+    $parm_length   = $v['parameter_length'];
+    $parm_required = $v['parameter_required'];
+    $parm_name     = 'rptparm_' . $v['parameter_name'];
+    $parm_type     = $v['parameter_type'];
+    $parm_value    = $v['parameter_default'];
+    if (isset($_POST[$parm_name])) {
+        $parm_value = cleaner($_POST[$parm_name]);
     }
+    switch ($parm_type) {
+        case 'int':
+            $parm_value = (int)$parm_value;
+            break;
+        case 'yesno':
+            $parm_value = (int)$parm_value;
+            if ($parm_value) {
+                $parm_value = '1';
+            } else {
+                $parm_value = '0';
+            }
+            break;
+        case 'autocomplete':
+            $this_report_needs_jquery = true;
+        // fall through
+        default: // text, liketext, date
+            $parm_value = clipstring($parm_value, $parm_length);
+            break;
+    }
+    $parameters[$v['parameter_id']]['value'] = $parm_value;
+}
 // build form
-    $report_parameter_form=getParameterForm($report_id, $parameters, $editor=true);
-    $xoopsTpl->assign('report_parameter_form', $report_parameter_form);
+$report_parameter_form = getParameterForm($report_id, $parameters, $editor = true);
+$xoopsTpl->assign('report_parameter_form', $report_parameter_form);
 
-    if (count($parameters)==0) {
-        $op='run';
-    }
+if (count($parameters) == 0) {
+    $op = 'run';
+}
 
-if ($op=='display') {
-    if ($report_description!='') {
+if ($op === 'display') {
+    if ($report_description != '') {
         $xoopsTpl->assign('page_message', $report_description);
     }
 }
 
-$body='';
+$body = '';
 
-if ($op=='run') {
-    $parmtags=array();
-    $parmsubs=array();
+if ($op === 'run') {
+    $parmtags = array();
+    $parmsubs = array();
 
-    $pc=0;
-    $parmtags[$pc]='{$xpfx}';
-    $parmsubs[$pc]=$xoopsDB->prefix('').'_';
+    $pc            = 0;
+    $parmtags[$pc] = '{$xpfx}';
+    $parmsubs[$pc] = $xoopsDB->prefix('') . '_';
     ++$pc;
-    $parmtags[$pc]='{$xuid}';
-    $parmsubs[$pc]=($xoopsUser ? $xoopsUser->getVar('uid') : 0);
+    $parmtags[$pc] = '{$xuid}';
+    $parmsubs[$pc] = ($xoopsUser ? $xoopsUser->getVar('uid') : 0);
     foreach ($parameters as $v) {
         ++$pc;
-        $parmtags[$pc]='{'.$v['parameter_name'].'}';
-        $parm_type=$v['parameter_type'];
+        $parmtags[$pc] = '{' . $v['parameter_name'] . '}';
+        $parm_type     = $v['parameter_type'];
         // apply any preconditioning
-        // 	'text','liketext','date','datetime','integer','yesno'
+        //  'text','liketext','date','datetime','integer','yesno'
         switch ($parm_type) {
-            case "liketext":
-                $parmsubs[$pc]=dbescape('%'.$v['value'].'%');
+            case 'liketext':
+                $parmsubs[$pc] = dbescape('%' . $v['value'] . '%');
                 break;
-            case "date":
-                $parmsubs[$pc]=strtotime($v['value']);
+            case 'date':
+                $parmsubs[$pc] = strtotime($v['value']);
                 break;
-            case "integer":
-                $parmsubs[$pc]=intval($v['value']);
+            case 'integer':
+                $parmsubs[$pc] = (int)$v['value'];
                 break;
-            case "decimal":
-                $dp=$v['parameter_decimals'];
-                $dp=sprintf('%01d', $dp);
-                $parmsubs[$pc]=sprintf('%01.'.$dp.'f', round($v['value'], $dp));
+            case 'decimal':
+                $dp            = $v['parameter_decimals'];
+                $dp            = sprintf('%01d', $dp);
+                $parmsubs[$pc] = sprintf('%01.' . $dp . 'f', round($v['value'], $dp));
                 break;
-            case "yesno":
-                $parmsubs[$pc]=intval($v['value']);
+            case 'yesno':
+                $parmsubs[$pc] = (int)$v['value'];
                 break;
             default:
-                $parmsubs[$pc]=dbescape($v['value']);
+                $parmsubs[$pc] = dbescape($v['value']);
                 break;
         }
     }
 
-
     foreach ($sections as $s) {
-        $section_id=$s['section_id'];
-        $section_name=$s['section_name'];
-        $section_description=$s['section_description'];
-        $section_order=$s['section_order'];
-        $section_showtitle=$s['section_showtitle'];
-        $section_multirow=$s['section_multirow'];
-        $section_skipempty=$s['section_skipempty'];
-        $section_datatools=$s['section_datatools'];
-        $section_query=$s['section_query'];
+        $section_id          = $s['section_id'];
+        $section_name        = $s['section_name'];
+        $section_description = $s['section_description'];
+        $section_order       = $s['section_order'];
+        $section_showtitle   = $s['section_showtitle'];
+        $section_multirow    = $s['section_multirow'];
+        $section_skipempty   = $s['section_skipempty'];
+        $section_datatools   = $s['section_datatools'];
+        $section_query       = $s['section_query'];
 
         if ($section_datatools) {
-            $this_report_needs_jquery=true;
+            $this_report_needs_jquery = true;
         }
 
         unset($columns);
-        $columns=getColumns($section_id);
+        $columns = getColumns($section_id);
 
-        $rowclass='even';
+        $rowclass = 'even';
 
-        $sql=str_replace($parmtags, $parmsubs, $section_query);
+        $sql    = str_replace($parmtags, $parmsubs, $section_query);
         $result = $xoopsDB->query($sql);
-        $dbmsg='';
+        $dbmsg  = '';
         if ($xoopsDB->errno()) {
-            $dbmsg=formatDBError();
+            $dbmsg = formatDBError();
         }
         if ($result) {
-            if ($myrow=$xoopsDB->fetchArray($result)) {
-                $rowheaders=array();
-                $colcount=initializeColumns($columns, $myrow, $rowheaders);
+            if ($myrow = $xoopsDB->fetchArray($result)) {
+                $rowheaders = array();
+                $colcount   = initializeColumns($columns, $myrow, $rowheaders);
                 if ($section_multirow) {
-                    $datatool_class='';
+                    $datatool_class = '';
                     if ($section_datatools) {
-                        $datatool_class=' class="dataTable" ';
+                        $datatool_class = ' class="dataTable" ';
                     }
-                    $body.='<table'.$datatool_class.'><thead><tr>';
+                    $body .= '<table' . $datatool_class . '><thead><tr>';
                     if ($section_showtitle) {
-                        $colspan=$colcount;
-                        $body.="<th colspan=$colspan>$section_name</th></tr><tr>";
+                        $colspan = $colcount;
+                        $body .= "<th colspan=$colspan>$section_name</th></tr><tr>";
                     }
-                    foreach ($myrow as $col=>$row) {
-                        $body.=emitColumnHeader($col, $columns, $section_multirow);
+                    foreach ($myrow as $col => $row) {
+                        $body .= emitColumnHeader($col, $columns, $section_multirow);
                     }
-                    $body.='</tr></thead><tbody>';
+                    $body .= '</tr></thead><tbody>';
                     while ($myrow) {
-                        $breaktriggered=checkBreak($columns, $myrow);
+                        $breaktriggered = checkBreak($columns, $myrow);
                         if ($breaktriggered) {
-                            $trcontent=emitBreak($columns, $rowheaders);
-                            if ($trcontent!='') {
-                                $body.='<tr class="sumbreak">';
-                                $body.=$trcontent.'</tr>';
+                            $trcontent = emitBreak($columns, $rowheaders);
+                            if ($trcontent != '') {
+                                $body .= '<tr class="sumbreak">';
+                                $body .= $trcontent . '</tr>';
                             }
                         }
-                        if ($rowclass=='even') {
-                            $rowclass='odd';
+                        if ($rowclass === 'even') {
+                            $rowclass = 'odd';
                         } else {
-                            $rowclass='even';
+                            $rowclass = 'even';
                         }
-                        $body.='<tr class="'.$rowclass.'">';
-                        foreach ($myrow as $col=>$row) {
-                            $body.= emitColumn($col, $columns, $myrow, $breaktriggered, $rowheaders);
+                        $body .= '<tr class="' . $rowclass . '">';
+                        foreach ($myrow as $col => $row) {
+                            $body .= emitColumn($col, $columns, $myrow, $breaktriggered, $rowheaders);
                         }
-                        $body.='</tr>';
+                        $body .= '</tr>';
 
-                        $myrow=$xoopsDB->fetchArray($result);
+                        $myrow = $xoopsDB->fetchArray($result);
                     }
 
                     // automatic break at end
-                    $trcontent=emitBreak($columns, $rowheaders);
-                    if ($trcontent!='') {
-                        $body.='<tr class="sumbreak">';
-                        $body.=$trcontent.'</tr>';
+                    $trcontent = emitBreak($columns, $rowheaders);
+                    if ($trcontent != '') {
+                        $body .= '<tr class="sumbreak">';
+                        $body .= $trcontent . '</tr>';
                     }
 
                     // final summary
-                    $trcontent=emitFinalSummary($columns, $rowheaders);
-                    if ($trcontent!='') {
-                        $body.='<tr class="sumtotal">';
-                        $body.=$trcontent.'</tr>';
+                    $trcontent = emitFinalSummary($columns, $rowheaders);
+                    if ($trcontent != '') {
+                        $body .= '<tr class="sumtotal">';
+                        $body .= $trcontent . '</tr>';
                     }
                 } else { // $section_multirow is false
-                    $body.='<table><tbody>';
+                    $body .= '<table><tbody>';
                     if ($section_showtitle) {
-                        $body.="<tr><th colspan=\"2\">$section_name</th></tr>";
+                        $body .= "<tr><th colspan=\"2\">$section_name</th></tr>";
                     }
                     while ($myrow) {
-                        $breaktriggered=false;
-                        $breaktriggered=checkBreak($columns, $myrow);
+                        $breaktriggered = false;
+                        $breaktriggered = checkBreak($columns, $myrow);
                         if ($breaktriggered) {
-                            $body.='<tr class="sumbreak"><td>&nbsp;</td><td></td></tr>';
+                            $body .= '<tr class="sumbreak"><td>&nbsp;</td><td></td></tr>';
                         }
-                        foreach ($myrow as $col=>$row) {
-                            $trcontent=emitColumnHeader($col, $columns, $section_multirow);
-                            $trcontent.=emitColumn($col, $columns, $myrow, $breaktriggered, $rowheaders);
-                            if ($trcontent!='') {
-                                $body.= '<tr>'.$trcontent.'</tr>';
+                        foreach ($myrow as $col => $row) {
+                            $trcontent = emitColumnHeader($col, $columns, $section_multirow);
+                            $trcontent .= emitColumn($col, $columns, $myrow, $breaktriggered, $rowheaders);
+                            if ($trcontent != '') {
+                                $body .= '<tr>' . $trcontent . '</tr>';
                             }
                         }
-                        $myrow=$xoopsDB->fetchArray($result);
+                        $myrow = $xoopsDB->fetchArray($result);
                     }
                 }
 
-                $body.='</tbody></table><br />';
+                $body .= '</tbody></table><br />';
             } else { // else no data for section
                 if (!$section_skipempty) {
-                    $body.='<table><tr>';
+                    $body .= '<table><tr>';
                     if ($section_showtitle) {
-                        $body.="<th>$section_name</th></tr><tr>";
+                        $body .= "<th>$section_name</th></tr><tr>";
                     }
-                    $body.='<td><em>'._MD_GWREPORTS_SECTION_EMPTY.'</em></th></tr></table><br />';
+                    $body .= '<td><em>' . _MD_GWREPORTS_SECTION_EMPTY . '</em></th></tr></table><br />';
                 }
             }
         }
-//		if($dbmsg!='') $body.='<br /><em>'.sprintf(_MD_GWREPORTS_RUNTIME_SQL_ERROR,$dbmsg).'</em><br />';
-        if ($dbmsg!='') {
-            $body.='<br /><em>'.$dbmsg.'</em><br />';
+        //      if($dbmsg!='') $body.='<br /><em>'.sprintf(_MD_GWREPORTS_RUNTIME_SQL_ERROR,$dbmsg).'</em><br />';
+        if ($dbmsg != '') {
+            $body .= '<br /><em>' . $dbmsg . '</em><br />';
         }
     } // foreach ($sections as $s)
 }
 
 //$dirname=$xoopsModule->getInfo('dirname');
-$body.='<br /><a href="admin/index.php">'._MD_GWREPORTS_ADMIN_MENU.'</a>';
-$body.=' | <a href="admin/reports.php">'._MD_GWREPORTS_ADMIN_REPORT.'</a>';
-$body.=' | <a href="admin/topics.php">'._MD_GWREPORTS_ADMIN_TOPIC.'</a>';
-$body.=" | <a href=\"editreport.php?rid=$report_id\">"._MD_GWREPORTS_EDITREPORT_FORM.'</a>';
+$body .= '<br /><a href="admin/index.php">' . _MD_GWREPORTS_ADMIN_MENU . '</a>';
+$body .= ' | <a href="admin/reports.php">' . _MD_GWREPORTS_ADMIN_REPORT . '</a>';
+$body .= ' | <a href="admin/topics.php">' . _MD_GWREPORTS_ADMIN_TOPIC . '</a>';
+$body .= " | <a href=\"editreport.php?rid=$report_id\">" . _MD_GWREPORTS_EDITREPORT_FORM . '</a>';
 
 //$debug='<pre>$_POST='.print_r($_POST,true).'</pre>';
 //if(isset($parameters)) $debug.='<pre>$parameters='.print_r($parameters,true).'</pre>';
@@ -541,4 +538,4 @@ if (isset($debug)) {
     $xoopsTpl->assign('debug', $debug);
 }
 
-include(XOOPS_ROOT_PATH."/footer.php");
+include XOOPS_ROOT_PATH . '/footer.php';

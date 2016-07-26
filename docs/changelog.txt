@@ -1,12 +1,17 @@
 gwreports ChangeLog
 
+1.2 Beta 1  NOT RELEASED
+============================
+- XOOPS 2.5.8 and PHP 7 updates (mamba)
+
+
 === gwreports Module 1.1 Final ===
 Release date: 2013-05-17
 
 * bug fixes
 * French language files provided by Philippe Masson
 * Auto Complete parameters and Data Tools features (started by KS Tan)
-* XOOPS Blue Move and ModuleAdmin compatibility 
+* XOOPS Blue Move and ModuleAdmin compatibility
 
 === gwreports Module 1.0 ===
 Release date: 2011-05-20

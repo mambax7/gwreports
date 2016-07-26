@@ -1,27 +1,25 @@
 <?php
 /**
-* sortreports.php - change display order of reports within a topic
-*
-* This file is part of gwreports - geekwright Reports
-*
-* @copyright  Copyright © 2011 geekwright, LLC. All rights reserved.
-* @license    gwreports/docs/license.txt  GNU General Public License (GPL)
-* @since      1.0
-* @author     Richard Griffith <richard@geekwright.com>
-* @package    gwreports
-* @version    $Id$
-*/
+ * sortreports.php - change display order of reports within a topic
+ *
+ * This file is part of gwreports - geekwright Reports
+ *
+ * @copyright  Copyright © 2011 geekwright, LLC. All rights reserved.
+ * @license    gwreports/docs/license.txt  GNU General Public License (GPL)
+ * @author     Richard Griffith <richard@geekwright.com>
+ * @package    gwreports
+ */
 
-include '../../mainfile.php';
+include __DIR__ . '/../../mainfile.php';
 $GLOBALS['xoopsOption']['template_main'] = 'gwreports_index.html';
-include(XOOPS_ROOT_PATH.'/header.php');
-$currentscript=basename(__FILE__) ;
+include XOOPS_ROOT_PATH . '/header.php';
+$currentscript = basename(__FILE__);
 //include_once XOOPS_ROOT_PATH.'/class/xoopsformloader.php';
-include('include/common.php');
+include __DIR__ . '/include/common.php';
 
-$selectalert=_MD_GWREPORTS_SORT_REPORT_SELECT;
-$sortelement='sortelement';
-$sort_js = <<<ENDJSCODE
+$selectalert = _MD_GWREPORTS_SORT_REPORT_SELECT;
+$sortelement = 'sortelement';
+$sort_js     = <<<ENDJSCODE
 function move(f,bDir) {
   var el = f.elements["$sortelement"]
   var idx = el.selectedIndex
@@ -72,99 +70,99 @@ function processForm(f) {
 }
 ENDJSCODE;
 
-$xoTheme->addScript(null, array( 'type' => 'text/javascript' ), $sort_js);
+$xoTheme->addScript(null, array('type' => 'text/javascript'), $sort_js);
 
 // leave if we don't have admin authority
-if (!($xoopsUser && ($xoopsUser->isAdmin()))) {
+if (!($xoopsUser && $xoopsUser->isAdmin())) {
     redirect_header('index.php', 3, _NOPERM);
 }
 
-$topic_id=0;
+$topic_id = 0;
 if (isset($_GET['tid'])) {
-    $topic_id = intval($_GET['tid']);
+    $topic_id = (int)$_GET['tid'];
 }
 if (isset($_POST['tid'])) {
-    $topic_id = intval($_POST['tid']);
+    $topic_id = (int)$_POST['tid'];
 }
 
 if (!$topic_id) {
     if (isset($_GET['rid'])) {
-        $topic_id = getReportTopic(intval($_GET['rid']));
+        $topic_id = getReportTopic((int)$_GET['rid']);
     }
 }
 if (!$topic_id) {
-    redirect_header("index.php", 3, _MD_GWREPORTS_MISSING_PARAMETER);
+    redirect_header('index.php', 3, _MD_GWREPORTS_MISSING_PARAMETER);
 }
 
-$reports=getReportsByTopic($topic_id);
-$topic_data=getTopic($topic_id);
-$topic_name=$topic_data['topic_name'];
+$reports    = getReportsByTopic($topic_id);
+$topic_data = getTopic($topic_id);
+$topic_name = $topic_data['topic_name'];
 
-$op='display';
+$op = 'display';
 if (isset($_POST['submit'])) {
-    $op='update';
+    $op = 'update';
 }
 
 // leave if there is nothing to sort
-if (count($reports)<2) {
+if (count($reports) < 2) {
     redirect_header("edittopic.php?tid=$topic_id", 3, _MD_GWREPORTS_SORT_EMPTY);
 }
 
-if ($op=='update') {
+if ($op === 'update') {
     if (isset($_POST['neworder'])) {
-        $neworder=array();
-        $neworder=explode(',', $_POST['neworder']);
+        $neworder = array();
+        $neworder = explode(',', $_POST['neworder']);
     } else {
-        $op='display';
+        $op = 'display';
     }
 }
 
-if ($op=='update') {
+if ($op === 'update') {
     foreach ($neworder as $i => $report) {
         if (isset($reports[$report])) {
             $reports[$report]['grouping_order'] = $i;
         } else {
-            $op='display';
+            $op = 'display';
         }
     }
 }
 
-if ($op=='update') {
+if ($op === 'update') {
     foreach ($reports as $i => $v) {
-        $sql ='UPDATE '.$xoopsDB->prefix('gwreports_grouping');
-        $sql.=' SET grouping_order = '.$v['grouping_order'];
-        $sql.=' WHERE report = '. $v['report_id']. ' ';
+        $sql = 'UPDATE ' . $xoopsDB->prefix('gwreports_grouping');
+        $sql .= ' SET grouping_order = ' . $v['grouping_order'];
+        $sql .= ' WHERE report = ' . $v['report_id'] . ' ';
         $result = $xoopsDB->queryF($sql);
     }
     unset($reports);
-    $reports=getReportsByTopic($topic_id);
-    $op='display';
+    $reports = getReportsByTopic($topic_id);
+    $op      = 'display';
 }
 
-$token=0;
+$token = 0;
 
 $caption = _MD_GWREPORTS_SORT_REPORT_FORM;
-$form = new XoopsThemeForm($caption, 'form1', '', 'POST', $token);
+$form    = new XoopsThemeForm($caption, 'form1', '', 'POST', $token);
 
 $caption = _MD_GWREPORTS_TOPIC_NAME;
-$form->addElement(new XoopsFormLabel($caption, '<a href="edittopic.php?tid='.$topic_id.'">'.$topic_name.'</a>', 'topic_name'), false);
+$form->addElement(new XoopsFormLabel($caption, '<a href="edittopic.php?tid=' . $topic_id . '">' . $topic_name . '</a>', 'topic_name'), false);
 
-$caption = _MD_GWREPORTS_SORT_ACTIONS;
-$buttontray=new XoopsFormElementTray($caption, '');
+$caption    = _MD_GWREPORTS_SORT_ACTIONS;
+$buttontray = new XoopsFormElementTray($caption, '');
 
-$button_moveup=new XoopsFormButton('', 'moveup', _MD_GWREPORTS_SORT_UP, 'button');
+$button_moveup = new XoopsFormButton('', 'moveup', _MD_GWREPORTS_SORT_UP, 'button');
 $button_moveup->setExtra('onClick="move(this.form,true)" ');
 $buttontray->addElement($button_moveup);
 
-$button_movedown=new XoopsFormButton('', 'movedown', _MD_GWREPORTS_SORT_DOWN, 'button');
+$button_movedown = new XoopsFormButton('', 'movedown', _MD_GWREPORTS_SORT_DOWN, 'button');
 $button_movedown->setExtra('onClick="move(this.form,false)" ');
 $buttontray->addElement($button_movedown);
 
-$button_reverse=new XoopsFormButton('', 'reverse', _MD_GWREPORTS_SORT_REVERSE, 'button');
+$button_reverse = new XoopsFormButton('', 'reverse', _MD_GWREPORTS_SORT_REVERSE, 'button');
 $button_reverse->setExtra('onClick="reverseorder(this.form)" ');
 $buttontray->addElement($button_reverse);
 
-$button_submit=new XoopsFormButton('', 'submit', _MD_GWREPORTS_SORT_SAVE, 'submit');
+$button_submit = new XoopsFormButton('', 'submit', _MD_GWREPORTS_SORT_SAVE, 'submit');
 $button_submit->setExtra('onClick="processForm(this.form)" ');
 $buttontray->addElement($button_submit);
 
@@ -180,13 +178,13 @@ $form->addElement($listbox);
 $form->addElement($buttontray);
 
 $form->addElement(new XoopsFormHidden('neworder', ''));
-$body=$form->render();
+$body = $form->render();
 
 //$dirname=$xoopsModule->getInfo('dirname');
-$body.='<br /><a href="admin/index.php">'._MD_GWREPORTS_ADMIN_MENU.'</a>';
-$body.=' | <a href="admin/reports.php">'._MD_GWREPORTS_ADMIN_REPORT.'</a>';
-$body.=' | <a href="admin/topics.php">'._MD_GWREPORTS_ADMIN_TOPIC.'</a>';
-$body.=" | <a href=\"edittopic.php?tid=$topic_id\">"._MD_GWREPORTS_EDITTOPIC_FORM.'</a>';
+$body .= '<br /><a href="admin/index.php">' . _MD_GWREPORTS_ADMIN_MENU . '</a>';
+$body .= ' | <a href="admin/reports.php">' . _MD_GWREPORTS_ADMIN_REPORT . '</a>';
+$body .= ' | <a href="admin/topics.php">' . _MD_GWREPORTS_ADMIN_TOPIC . '</a>';
+$body .= " | <a href=\"edittopic.php?tid=$topic_id\">" . _MD_GWREPORTS_EDITTOPIC_FORM . '</a>';
 
 //$debug='<pre>$_POST='.print_r($_POST,true).'</pre>';
 //$debug.='<pre>$places='.print_r($places,true).'</pre>';
@@ -216,4 +214,4 @@ if (isset($debug)) {
     $xoopsTpl->assign('debug', $debug);
 }
 
-include(XOOPS_ROOT_PATH.'/footer.php');
+include XOOPS_ROOT_PATH . '/footer.php';

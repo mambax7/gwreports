@@ -1,8 +1,6 @@
 <?php
-// @version    $Id$
-if (!defined("XOOPS_ROOT_PATH")) {
-    die("Root path not defined");
-}
+defined('XOOPS_ROOT_PATH') || exit('XOOPS root path not defined');
+
 define('_MD_GWREPORTS_TITLE', 'gwreports');
 define('_MD_GWREPORTS_TITLE_SEP', ' : ');
 
@@ -200,7 +198,6 @@ define('_MD_GWREPORTS_SECTION_MULTIROW', 'Section is Multirow');
 define('_MD_GWREPORTS_SECTION_QUERY', 'SQL Query');
 define('_MD_GWREPORTS_SECTION_SHOWTITLE', 'Show Section Name');
 define('_MD_GWREPORTS_SECTION_SKIPEMPTY', 'Supress display if empty');
-
 
 // Parameter Types
 // enum('text','liketext','datetime','integer','yesno')

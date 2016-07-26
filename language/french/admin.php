@@ -1,22 +1,19 @@
 <?php
-// @version    $Id: admin.php 15 2011-05-19 23:37:21Z rgriffith $
-if (!defined("XOOPS_ROOT_PATH")) {
-    die("Root path not defined");
-}
+defined('XOOPS_ROOT_PATH') || exit('XOOPS root path not defined');
+
 // Admin constants
 
 // Admin Menu
-define("_AD_GWREPORTS_ADMENU", "Menu");
-define("_AD_GWREPORTS_AD_TOPIC", "Sujets");
-define("_AD_GWREPORTS_AD_REPORT", "Rapports");
-define("_AD_GWREPORTS_AD_EXPLORE", "Explore");
+define('_AD_GWREPORTS_ADMENU', 'Menu');
+define('_AD_GWREPORTS_AD_TOPIC', 'Sujets');
+define('_AD_GWREPORTS_AD_REPORT', 'Rapports');
+define('_AD_GWREPORTS_AD_EXPLORE', 'Explore');
 define('_AD_GWREPORTS_ADMENU_ABOUT', 'A propos');
-define("_AD_GWREPORTS_ADMENU_PREF", "Pr&eacute;f&eacute;rences");
-define("_AD_GWREPORTS_ADMENU_GOMOD", "Aller au module");
-if (!defined("_MI_GWREPORTS_ADMENU")) {
-    @include_once dirname(__FILE__) . '/modinfo.php';
+define('_AD_GWREPORTS_ADMENU_PREF', 'Pr&eacute;f&eacute;rences');
+define('_AD_GWREPORTS_ADMENU_GOMOD', 'Aller au module');
+if (!defined('_MI_GWREPORTS_ADMENU')) {
+    @include_once __DIR__ . '/modinfo.php';
 }
-
 
 // Admin Report List
 define('_AD_GWREPORTS_AD_REPORT_FORMNAME', 'Selectionner un rapport');

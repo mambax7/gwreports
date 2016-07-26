@@ -1,8 +1,6 @@
 <?php
-// @version    $Id: main.php 10 2011-05-12 22:42:27Z rgriffith $
-if (!defined("XOOPS_ROOT_PATH")) {
-    die("Root path not defined");
-}
+defined('XOOPS_ROOT_PATH') || exit('XOOPS root path not defined');
+
 define('_MD_GWREPORTS_TITLE', 'Gestionnaire de rapports');
 define('_MD_GWREPORTS_TITLE_SEP', ' : ');
 
@@ -202,7 +200,6 @@ define('_MD_GWREPORTS_SECTION_MULTIROW', 'Section multi colonne');
 define('_MD_GWREPORTS_SECTION_QUERY', 'Requ&egrave;te SQL');
 define('_MD_GWREPORTS_SECTION_SHOWTITLE', 'Afficher le nom de la section');
 define('_MD_GWREPORTS_SECTION_SKIPEMPTY', 'Supprimer l\'affichage si aucune donn&eacute;e');
-
 
 // Parameter Types
 // enum('text','liketext','datetime','integer','yesno')

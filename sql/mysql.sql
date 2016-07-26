@@ -1,83 +1,97 @@
 #
 # Tables for gwreports module
-# @version    $Id$
+# @version    $Id: mysql.sql 45 2013-04-04 17:08:14Z rgriffith $
 #
 
 CREATE TABLE gwreports_report (
-  report_id int(8) unsigned NOT NULL auto_increment,
-  report_name varchar(255) NOT NULL,
-  report_description text NOT NULL,
-  report_active tinyint unsigned NOT NULL default '0',
+  report_id          INT(8) UNSIGNED  NOT NULL AUTO_INCREMENT,
+  report_name        VARCHAR(255)     NOT NULL,
+  report_description TEXT             NOT NULL,
+  report_active      TINYINT UNSIGNED NOT NULL DEFAULT '0',
   PRIMARY KEY (report_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+)
+  ENGINE = InnoDB
+  DEFAULT CHARSET = utf8;
 
 CREATE TABLE gwreports_access (
-  report int(8) unsigned NOT NULL,
-  groupid int(5)  unsigned NOT NULL,
+  report  INT(8) UNSIGNED NOT NULL,
+  groupid INT(5) UNSIGNED NOT NULL,
   PRIMARY KEY (report, groupid)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+)
+  ENGINE = InnoDB
+  DEFAULT CHARSET = utf8;
 
 CREATE TABLE gwreports_parameter (
-  parameter_id int(8) unsigned NOT NULL auto_increment,
-  report int(8) unsigned NOT NULL,
-  parameter_name varchar(255) NOT NULL,
-  parameter_title varchar(255) NOT NULL,
-  parameter_description text NOT NULL,
-  parameter_order int(8) unsigned NOT NULL default '0',
-  parameter_default varchar(255) NOT NULL,
-  parameter_required tinyint unsigned NOT NULL default '0',
-  parameter_length int(3) unsigned NOT NULL default '0',
-  parameter_type enum('text','liketext','date','integer','yesno','decimal', 'autocomplete') NOT NULL default 'text',
-  parameter_decimals int(3) unsigned NOT NULL default '0',
-  parameter_sqlchoice text NOT NULL,
+  parameter_id          INT(8) UNSIGNED                                                                  NOT NULL AUTO_INCREMENT,
+  report                INT(8) UNSIGNED                                                                  NOT NULL,
+  parameter_name        VARCHAR(255)                                                                     NOT NULL,
+  parameter_title       VARCHAR(255)                                                                     NOT NULL,
+  parameter_description TEXT                                                                             NOT NULL,
+  parameter_order       INT(8) UNSIGNED                                                                  NOT NULL DEFAULT '0',
+  parameter_default     VARCHAR(255)                                                                     NOT NULL,
+  parameter_required    TINYINT UNSIGNED                                                                 NOT NULL DEFAULT '0',
+  parameter_length      INT(3) UNSIGNED                                                                  NOT NULL DEFAULT '0',
+  parameter_type        ENUM ('text', 'liketext', 'date', 'integer', 'yesno', 'decimal', 'autocomplete') NOT NULL DEFAULT 'text',
+  parameter_decimals    INT(3) UNSIGNED                                                                  NOT NULL DEFAULT '0',
+  parameter_sqlchoice   TEXT                                                                             NOT NULL,
   PRIMARY KEY (parameter_id),
   UNIQUE KEY (report, parameter_name)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+)
+  ENGINE = InnoDB
+  DEFAULT CHARSET = utf8;
 
 CREATE TABLE gwreports_topic (
-  topic_id int(8) unsigned NOT NULL auto_increment,
-  topic_name varchar(255) NOT NULL,
-  topic_description text NOT NULL,
-  topic_order int(8) unsigned NOT NULL default '0',
+  topic_id          INT(8) UNSIGNED NOT NULL AUTO_INCREMENT,
+  topic_name        VARCHAR(255)    NOT NULL,
+  topic_description TEXT            NOT NULL,
+  topic_order       INT(8) UNSIGNED NOT NULL DEFAULT '0',
   PRIMARY KEY (topic_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+)
+  ENGINE = InnoDB
+  DEFAULT CHARSET = utf8;
 
 CREATE TABLE gwreports_grouping (
-  topic int(8) unsigned NOT NULL,
-  report int(8)  unsigned NOT NULL,
-  grouping_order int(8) unsigned NOT NULL default '0',
+  topic          INT(8) UNSIGNED NOT NULL,
+  report         INT(8) UNSIGNED NOT NULL,
+  grouping_order INT(8) UNSIGNED NOT NULL DEFAULT '0',
   PRIMARY KEY (topic, report)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+)
+  ENGINE = InnoDB
+  DEFAULT CHARSET = utf8;
 
 CREATE TABLE gwreports_section (
-  section_id int(8) unsigned NOT NULL auto_increment,
-  report int(8)  unsigned NOT NULL,
-  section_name varchar(255) NOT NULL,
-  section_description text NOT NULL,
-  section_order int(8) unsigned NOT NULL default '0',
-  section_showtitle tinyint unsigned NOT NULL default '0',
-  section_multirow tinyint unsigned NOT NULL default '1',
-  section_skipempty tinyint unsigned NOT NULL default '0',
-  section_datatools tinyint unsigned NOT NULL default '0',
-  section_query text NOT NULL,
+  section_id          INT(8) UNSIGNED  NOT NULL AUTO_INCREMENT,
+  report              INT(8) UNSIGNED  NOT NULL,
+  section_name        VARCHAR(255)     NOT NULL,
+  section_description TEXT             NOT NULL,
+  section_order       INT(8) UNSIGNED  NOT NULL DEFAULT '0',
+  section_showtitle   TINYINT UNSIGNED NOT NULL DEFAULT '0',
+  section_multirow    TINYINT UNSIGNED NOT NULL DEFAULT '1',
+  section_skipempty   TINYINT UNSIGNED NOT NULL DEFAULT '0',
+  section_datatools   TINYINT UNSIGNED NOT NULL DEFAULT '0',
+  section_query       TEXT             NOT NULL,
   PRIMARY KEY (section_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+)
+  ENGINE = InnoDB
+  DEFAULT CHARSET = utf8;
 
 CREATE TABLE gwreports_column (
-  column_id int(8) unsigned NOT NULL auto_increment,
-  section int(8) unsigned NOT NULL,
-  column_name varchar(255) NOT NULL,
-  column_title varchar(255) NOT NULL,
-  column_hide tinyint unsigned NOT NULL default '0',
-  column_sum tinyint unsigned NOT NULL default '0',
-  column_break tinyint unsigned NOT NULL default '0',
-  column_outline tinyint unsigned NOT NULL default '0',
-  column_apply_nl2br tinyint unsigned NOT NULL default '0',
-  column_is_unixtime tinyint unsigned NOT NULL default '0',
-  column_format varchar(255) NOT NULL default '',
-  column_style varchar(255) NOT NULL default '',
-  column_extended_format text NOT NULL default '',
+  column_id              INT(8) UNSIGNED  NOT NULL AUTO_INCREMENT,
+  section                INT(8) UNSIGNED  NOT NULL,
+  column_name            VARCHAR(255)     NOT NULL,
+  column_title           VARCHAR(255)     NOT NULL,
+  column_hide            TINYINT UNSIGNED NOT NULL DEFAULT '0',
+  column_sum             TINYINT UNSIGNED NOT NULL DEFAULT '0',
+  column_break           TINYINT UNSIGNED NOT NULL DEFAULT '0',
+  column_outline         TINYINT UNSIGNED NOT NULL DEFAULT '0',
+  column_apply_nl2br     TINYINT UNSIGNED NOT NULL DEFAULT '0',
+  column_is_unixtime     TINYINT UNSIGNED NOT NULL DEFAULT '0',
+  column_format          VARCHAR(255)     NOT NULL DEFAULT '',
+  column_style           VARCHAR(255)     NOT NULL DEFAULT '',
+  column_extended_format TEXT             NOT NULL,
   PRIMARY KEY (column_id),
   UNIQUE KEY (section, column_name)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+)
+  ENGINE = InnoDB
+  DEFAULT CHARSET = utf8;
 

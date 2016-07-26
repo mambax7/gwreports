@@ -1,22 +1,19 @@
 <?php
-// @version    $Id$
-if (!defined("XOOPS_ROOT_PATH")) {
-    die("Root path not defined");
-}
+defined('XOOPS_ROOT_PATH') || exit('XOOPS root path not defined');
+
 // Admin constants
 
 // Admin Menu
-define("_AD_GWREPORTS_ADMENU", "gwreports Menu");
-define("_AD_GWREPORTS_AD_TOPIC", "Topics");
-define("_AD_GWREPORTS_AD_REPORT", "Reports");
-define("_AD_GWREPORTS_AD_EXPLORE", "Explore");
+define('_AD_GWREPORTS_ADMENU', 'gwreports Menu');
+define('_AD_GWREPORTS_AD_TOPIC', 'Topics');
+define('_AD_GWREPORTS_AD_REPORT', 'Reports');
+define('_AD_GWREPORTS_AD_EXPLORE', 'Explore');
 define('_AD_GWREPORTS_ADMENU_ABOUT', 'About');
-define("_AD_GWREPORTS_ADMENU_PREF", "Preferences");
-define("_AD_GWREPORTS_ADMENU_GOMOD", "Go To Module");
-if (!defined("_MI_GWREPORTS_ADMENU")) {
-    @include_once dirname(__FILE__) . '/modinfo.php';
+define('_AD_GWREPORTS_ADMENU_PREF', 'Preferences');
+define('_AD_GWREPORTS_ADMENU_GOMOD', 'Go To Module');
+if (!defined('_MI_GWREPORTS_ADMENU')) {
+    @include_once __DIR__ . '/modinfo.php';
 }
-
 
 // Admin Report List
 define('_AD_GWREPORTS_AD_REPORT_FORMNAME', 'Select Reports');
