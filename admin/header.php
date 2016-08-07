@@ -14,7 +14,6 @@ include_once __DIR__ . '/../include/dbcommon.php';
 include_once $GLOBALS['xoops']->path('/Frameworks/moduleclasses/moduleadmin/moduleadmin.php');
 
 xoops_loadLanguage('modinfo', basename(dirname(__DIR__)));
-}
 
 xoops_cp_header();
 
